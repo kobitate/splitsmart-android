@@ -1,9 +1,11 @@
 package com.kobitate.splitsmart;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +19,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
 	EditText inputPrice;
 
 	ImageView thumb;
+
+	FloatingActionButton submitFAB;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 		inputName = (EditText) findViewById(R.id.input_item_name);
 		inputPrice = (EditText) findViewById(R.id.input_item_price);
+
 		thumb = (ImageView) findViewById(R.id.item_thumb);
+
+		submitFAB = (FloatingActionButton) findViewById(R.id.details_submit);
 
 		if (getIntent().hasExtra("scanned_item_name") && getIntent().hasExtra("scanned_item_price")) {
 			inputName.setText(getIntent().getStringExtra("scanned_item_name"));
@@ -44,6 +51,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
 			thumb.setMinimumHeight(100);
 			thumb.setMinimumWidth(100);
 		}
+
+
+		submitFAB.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// save new item and launch main activity
+			}
+		});
 
 	}
 }
