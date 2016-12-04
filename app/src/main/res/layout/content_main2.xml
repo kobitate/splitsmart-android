@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,10 +8,85 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.kobitate.splitsmart.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:orientation="vertical"
+    android:isScrollContainer="false">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorButtonNormal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp"
+        android:paddingEnd="16dp"
+        android:isScrollContainer="false">
+
+        <TextView
+            android:text="Basket 1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/basket1_title"
+            android:textColor="@color/textSecondary"
+            android:textStyle="normal|bold"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:text="$X.XX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/basket1_total"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:textColor="@color/textSecondary"/>
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/items"/>
-</RelativeLayout>
+        android:id="@+id/basket1_items"
+        android:isScrollContainer="false"
+        android:nestedScrollingEnabled="false"
+        android:layout_weight="1"
+        android:elevation="24dp"
+        android:clickable="false"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorButtonNormal"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:text="Basket 2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/basket2_title"
+            android:layout_weight="1"
+            android:textStyle="normal|bold"
+            android:textColor="@color/textSecondary"/>
+
+        <TextView
+            android:text="$X.XX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/basket2_total"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:textColor="@color/textSecondary"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/basket2_items"
+        android:isScrollContainer="false"
+        android:nestedScrollingEnabled="false"
+        android:layout_weight="1"/>
+
+</LinearLayout>

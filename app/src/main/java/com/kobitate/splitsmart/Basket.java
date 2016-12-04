@@ -28,6 +28,8 @@ public class Basket extends ArrayList<Item> {
         super.clear();
     }
 
+
+
     public double getSum() {
         return sum;
     }

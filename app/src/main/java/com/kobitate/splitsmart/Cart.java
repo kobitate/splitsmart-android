@@ -9,9 +9,9 @@ import java.util.Comparator;
  */
 
 public class Cart {
-	private Basket basket1;
-    private Basket basket2;
-	private ArrayList<Item> items;
+	public Basket basket1;
+    public Basket basket2;
+	public ArrayList<Item> items;
 
 	public Cart(Basket basket1, Basket basket2) {
 		this.basket1 = basket1;
@@ -22,6 +22,10 @@ public class Cart {
     public void add(Item item) {
         items.add(item);
     }
+
+	public void setItems(ArrayList<Item> items) {
+		this.items = items;
+	}
 
 	public void distributeItems() {
         // sort items descending

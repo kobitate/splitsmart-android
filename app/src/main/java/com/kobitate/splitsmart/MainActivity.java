@@ -1,22 +1,40 @@
 package com.kobitate.splitsmart;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
 	private ListView itemList;
-	private ItemAdapter itemAdapter;
+	private ArrayList<Item> allItems;
+
+	private AppDB db;
+
+	private final int PERMISSION_CAMERA = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -25,16 +43,70 @@ public class MainActivity extends AppCompatActivity {
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				startActivity(new Intent(view.getContext(), AddItemActivity.class));
+				if (ContextCompat.checkSelfPermission(view.getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+					ActivityCompat.requestPermissions((Activity) view.getContext(), new String[]{android.Manifest.permission.CAMERA}, PERMISSION_CAMERA);
+				}
+				else {
+					startActivity(new Intent(view.getContext(), AddItemActivity.class));
+				}
 			}
 		});
 
-		Item[] test = {new Item("Thing", 1.99), new Item("Thing", 1.99), new Item("Thing", 1.99)};
+		db = AppDB.getInstance(this);
 
-		itemAdapter = new ItemAdapter(this, R.layout.listitem, test);
+		try {
+			allItems = db.getItems();
+			Log.v(getString(R.string.app_name), "Got all items from DB");
+		}
+		catch (SQLiteException e) {
+			Log.e(getString(R.string.app_name), "SQLite Error: " + e.getMessage());
+			Toast.makeText(this, "Error loading items from DB", Toast.LENGTH_SHORT).show();
+		}
 
-		itemList = (ListView) findViewById(R.id.items);
-		itemList.setAdapter(itemAdapter);
+		Basket basket1 = new Basket(new Shopper("Shopper 1"));
+		Basket basket2 = new Basket(new Shopper("Shopper 2"));
+
+		Cart cart = new Cart(basket1, basket2);
+
+		cart.setItems(allItems);
+
+		cart.distributeItems();
+
+		ItemAdapter basket1Adapter = new ItemAdapter(this, R.id.basket1_items, cart.basket1);
+		ItemAdapter basket2Adapter = new ItemAdapter(this, R.id.basket1_items, cart.basket2);
+
+		Log.v(getString(R.string.app_name), "Adapters made");
+
+		ListView basket1List = (ListView) findViewById(R.id.basket1_items);
+		ListView basket2List = (ListView) findViewById(R.id.basket2_items);
+
+		basket1List.setAdapter(basket1Adapter);
+		basket2List.setAdapter(basket2Adapter);
+
+		TextView basket1Total = (TextView) findViewById(R.id.basket1_total);
+		TextView basket2Total = (TextView) findViewById(R.id.basket2_total);
+
+		basket1Total.setText(String.format(Locale.getDefault(), "$%.2f", cart.basket1.getSum()));
+		basket2Total.setText(String.format(Locale.getDefault(), "$%.2f", cart.basket2.getSum()));
+
+		Log.v(getString(R.string.app_name), "Adapters set");
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   @NonNull String permissions[], @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSION_CAMERA:
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					startActivity(new Intent(this, AddItemActivity.class));
+				}
+				else {
+					startActivity(new Intent(this, ItemDetailsActivity.class));
+				}
+
+		}
+
 	}
 
 }

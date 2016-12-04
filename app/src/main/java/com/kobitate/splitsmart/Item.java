@@ -8,19 +8,13 @@ public class Item {
 
 	private double price;
 	private String name;
-	private int upc;
+	private int dbID;
 
 
-	public Item(String name, double price) {
+	public Item(int dbID, String name, double price) {
+		this.dbID = dbID;
 		this.name = name;
 		this.price = price;
-	}
-
-
-	public Item(String name, double price, int upc) {
-		this.price = price;
-		this.name = name;
-		this.upc = upc;
 	}
 
 
@@ -30,10 +24,6 @@ public class Item {
 
 	public String getName() {
 		return name;
-	}
-
-	public int getUpc() {
-		return upc;
 	}
 
 }

@@ -87,9 +87,10 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         app:fabSize="normal"
-        app:srcCompat="@drawable/cart_add"
+        app:srcCompat="@drawable/check"
         android:id="@+id/details_submit"
         android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

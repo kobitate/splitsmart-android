@@ -9,14 +9,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,9 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -42,6 +36,9 @@ public class AddItemActivity extends BaseScannerActivity implements ZXingScanner
 
 	private ZXingScannerView scannerView;
 	private Button toManualButton;
+	private ViewGroup scannerFrame;
+
+	private final int PERMISSION_CAMERA = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +46,7 @@ public class AddItemActivity extends BaseScannerActivity implements ZXingScanner
 		setContentView(R.layout.activity_add_item);
 		setupToolbar();
 
-		ViewGroup scannerFrame = (ViewGroup) findViewById(R.id.scanner_frame);
+		scannerFrame = (ViewGroup) findViewById(R.id.scanner_frame);
 		toManualButton = (Button) findViewById(R.id.manual_entry);
 
 		scannerView = new ZXingScannerView(this) {
