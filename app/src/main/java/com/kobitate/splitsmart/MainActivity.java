@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 	private Basket basket1;
 	private Basket basket2;
 
+	private boolean usePowerset = true;
 
 	private AppDB db;
 
@@ -87,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
 
 		cart.setItems(allItems);
 
+		if (usePowerset) {
+			cart.powersetDistribute();
+		}
+		else {
+			cart.greedyDistribute();
+		}
 
 
 	}
