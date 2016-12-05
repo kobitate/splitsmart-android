@@ -60,12 +60,13 @@ public class MainActivity extends AppCompatActivity {
 			public void onClick(View view) {
 				if (ContextCompat.checkSelfPermission(view.getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 					ActivityCompat.requestPermissions((Activity) view.getContext(), new String[]{android.Manifest.permission.CAMERA}, PERMISSION_CAMERA);
-				}
-				else {
+				} else {
 					startActivity(new Intent(view.getContext(), AddItemActivity.class));
 				}
 			}
 		});
+
+	}
 
 	private void setupDB() {
 		db = AppDB.getInstance(this);
