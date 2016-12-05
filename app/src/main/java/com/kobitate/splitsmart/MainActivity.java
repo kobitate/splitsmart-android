@@ -24,8 +24,13 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-	private ListView itemList;
 	private ArrayList<Item> allItems;
+
+	private Cart cart;
+	private Basket basket1;
+	private Basket basket2;
+
+	private boolean usePowerset = true;
 
 	private AppDB db;
 
@@ -36,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+
+		setupDB();
+		setupViews();
+
+		setupCart();
+		buildLists();
+	}
+
+	private void setupViews() {
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -52,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+	private void setupDB() {
 		db = AppDB.getInstance(this);
 
 		try {
@@ -62,16 +78,27 @@ public class MainActivity extends AppCompatActivity {
 			Log.e(getString(R.string.app_name), "SQLite Error: " + e.getMessage());
 			Toast.makeText(this, "Error loading items from DB", Toast.LENGTH_SHORT).show();
 		}
+	}
 
-		Basket basket1 = new Basket(new Shopper("Shopper 1"));
-		Basket basket2 = new Basket(new Shopper("Shopper 2"));
+	private void setupCart() {
+		basket1 = new Basket(new Shopper("Shopper 1"));
+		basket2 = new Basket(new Shopper("Shopper 2"));
 
-		Cart cart = new Cart(basket1, basket2);
+		cart = new Cart(basket1, basket2);
 
 		cart.setItems(allItems);
 
-		cart.distributeItems();
+		if (usePowerset) {
+			cart.powersetDistribute();
+		}
+		else {
+			cart.greedyDistribute();
+		}
 
+
+	}
+
+	private void buildLists() {
 		ItemAdapter basket1Adapter = new ItemAdapter(this, R.id.basket1_items, cart.basket1);
 		ItemAdapter basket2Adapter = new ItemAdapter(this, R.id.basket1_items, cart.basket2);
 
@@ -108,5 +135,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 	}
+
+
 
 }
