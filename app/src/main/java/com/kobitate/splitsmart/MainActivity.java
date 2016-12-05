@@ -12,9 +12,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
 
 	private void setupViews() {
 
+		try {
+			usePowerset = db.getSetting("USE_POWERSET", 1);
+			Log.v(getString(R.string.app_name), "USE_POWERSET is " + usePowerset);
+		}
+		catch (SQLiteException e) {
+			Log.e(getString(R.string.app_name), "Error retrieving USE_POWERSET setting. " + e.getMessage());
+			usePowerset = true;
+		}
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -66,6 +79,41 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		});
+
+		final MenuItem powersetOption = (MenuItem) findViewById(R.id.menu_intensive_algorithm);
+
+		ImageButton options = (ImageButton) findViewById(R.id.options_menu);
+		options.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				PopupMenu menu = new PopupMenu(view.getContext(), view);
+				MenuInflater inflater = menu.getMenuInflater();
+				inflater.inflate(R.menu.options, menu.getMenu());
+				menu.show();
+				if (!usePowerset) {
+					powersetOption.setChecked(false);
+				}
+				menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						switch (item.getItemId()) {
+							case R.id.menu_settings:
+								startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+								return true;
+							case R.id.menu_intensive_algorithm:
+								db.setSetting("USE_POWERSET", (!usePowerset) ? 1 : 0);
+								item.setChecked(!usePowerset);
+								usePowerset = false;
+								startActivity(new Intent(getApplicationContext(), MainActivity.class));
+								return true;
+							default:
+								return false;
+						}
+					}
+				});
+			}
+		});
+	}
 
 	private void setupDB() {
 		db = AppDB.getInstance(this);
