@@ -1,9 +1,11 @@
 package com.kobitate.splitsmart;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -63,16 +65,21 @@ public class ItemDetailsActivity extends AppCompatActivity {
 		submitFAB.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				AppDB db = AppDB.getInstance(view.getContext());
-				try {
-					db.addItem(inputName.getText().toString(), Double.valueOf(inputPrice.getText().toString()));
+				if (inputName.getText().length() == 0 || inputPrice.getText().length() == 0) {
+					Toast.makeText(ItemDetailsActivity.this, "Please enter the item name and price to continue.", Toast.LENGTH_SHORT).show();
 				}
-				catch (SQLiteException e) {
-					Log.e(getString(R.string.app_name), "SQLite Error: " + e.getMessage());
-					Toast.makeText(view.getContext(), "Error adding item to database", Toast.LENGTH_SHORT).show();
-				}
+				else {
+					AppDB db = AppDB.getInstance(view.getContext());
+					try {
+						db.addItem(inputName.getText().toString(), Double.valueOf(inputPrice.getText().toString()));
+					}
+					catch (SQLiteException e) {
+						Log.e(getString(R.string.app_name), "SQLite Error: " + e.getMessage());
+						Toast.makeText(view.getContext(), "Error adding item to database", Toast.LENGTH_SHORT).show();
+					}
 
-				startActivity(new Intent(view.getContext(), MainActivity.class));
+					startActivity(new Intent(view.getContext(), MainActivity.class));
+				}
 
 			}
 		});
