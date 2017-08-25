@@ -5,7 +5,7 @@
 ![Screenshots](http://i.imgur.com/ORfLFJV.png)
 
 Created for a project in Dr. Vargas's Computer Architecture course at Georgia
-Southern University.
+Southern University, and vastly improved since then. 
 
 Scan items as you shop at Walmart, and the app will find the best way to split
 the items between two people! Add groups of items, items by weight, or just a 
@@ -14,3 +14,10 @@ single item.
 Barcode scanning for prices is currently only functional at Walmart in 
 Statesboro, GA (stores #754 and #2858), but a store location selector will be
 added before the official release. 
+
+## Dependencies 
+* [Android Support Library](https://developer.android.com/topic/libraries/support-library/index.html)
+* [dm77/barcodescanner](https://github.com/dm77/barcodescanner)
+* [google/volley](https://github.com/google/volley)
+* [square/picasso](https://github.com/square/picasso)
+* [roughike/BottomBar](https://github.com/roughike/BottomBar)
