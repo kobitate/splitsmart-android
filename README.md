@@ -19,5 +19,6 @@ added before the official release.
 * [Android Support Library](https://developer.android.com/topic/libraries/support-library/index.html)
 * [dm77/barcodescanner](https://github.com/dm77/barcodescanner)
 * [google/volley](https://github.com/google/volley)
+* [google/guava](https://github.com/google/guava)
 * [square/picasso](https://github.com/square/picasso)
 * [roughike/BottomBar](https://github.com/roughike/BottomBar)
