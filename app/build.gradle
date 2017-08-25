@@ -7,8 +7,8 @@ android {
         applicationId "com.kobitate.splitsmart"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
