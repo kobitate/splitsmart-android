@@ -1,11 +1,10 @@
 package com.kobitate.splitsmart;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
+import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,22 +13,24 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.Locale;
 
 public class ItemDetailsActivity extends AppCompatActivity {
+
+	final int ITEMS_SINGLE = 0;
+	final int ITEMS_MULTIPLE = 1;
+	final int ITEMS_WEIGHT = 3;
 
 	EditText inputName;
 	EditText inputPrice;
@@ -38,11 +39,18 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 	FloatingActionButton submitFAB;
 
-	CheckBox isWeightBox;
 	LinearLayout weightLayout;
+	LinearLayout multipleLayout;
+
+	CheckBox dontSplitMultiple;
+	EditText numItems;
+
 	TextView weightValue;
 	TextView finalPriceView;
 	LinearLayout weightPriceSummary;
+	BottomBar bottomBar;
+
+	int currentMode = ITEMS_SINGLE;
 
 	double byWeightPrice = 0;
 
@@ -67,11 +75,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 		submitFAB = (FloatingActionButton) findViewById(R.id.details_submit);
 
-		isWeightBox = (CheckBox) findViewById(R.id.perPoundCheck);
 		weightLayout = (LinearLayout) findViewById(R.id.weightEntry);
+		multipleLayout = (LinearLayout) findViewById(R.id.multipleEntry);
+
 		weightValue = (TextView) findViewById(R.id.weightValue);
 		finalPriceView = (TextView) findViewById(R.id.weightPrice);
 		weightPriceSummary = (LinearLayout) findViewById(R.id.poundPriceSummary);
+		bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+
+		dontSplitMultiple = (CheckBox) findViewById(R.id.multipleSplitCheck);
+		numItems = (EditText) findViewById(R.id.inputNumItems);
 
 		if (getIntent().hasExtra("scanned_item_name") && getIntent().hasExtra("scanned_item_price")) {
 			inputName.setText(getIntent().getStringExtra("scanned_item_name"));
@@ -92,7 +105,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 			@Override
 			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-				if (isWeightBox.isChecked()) {
+				if (currentMode == ITEMS_WEIGHT) {
 					updateByWeightPrice();
 				}
 			}
@@ -106,19 +119,64 @@ public class ItemDetailsActivity extends AppCompatActivity {
 		weightValue.addTextChangedListener(weightWatchers);
 		inputPrice.addTextChangedListener(weightWatchers);
 
+		bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+			@Override
+			public void onTabSelected(@IdRes int tabId) {
+				switch (tabId) {
+					case R.id.tab_single:
+						currentMode = ITEMS_SINGLE;
+						multipleLayout.setVisibility(View.GONE);
+						weightLayout.setVisibility(View.GONE);
+						break;
+					case R.id.tab_multiple:
+						currentMode = ITEMS_MULTIPLE;
+						multipleLayout.setVisibility(View.VISIBLE);
+						weightLayout.setVisibility(View.GONE);
+						break;
+					case R.id.tab_scale:
+						currentMode = ITEMS_WEIGHT;
+						multipleLayout.setVisibility(View.GONE);
+						weightLayout.setVisibility(View.VISIBLE);
+						break;
+				}
+
+			}
+		});
+
 		submitFAB.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (inputName.getText().length() == 0 || inputPrice.getText().length() == 0 || (isWeightBox.isChecked() && weightValue.getText().length() == 0)) {
+				if (inputName.getText().length() == 0 ||
+						inputPrice.getText().length() == 0 ||
+						(currentMode == ITEMS_WEIGHT && weightValue.getText().length() == 0) ||
+						(currentMode == ITEMS_MULTIPLE && numItems.getText().length() == 0)
+						) {
 					Toast.makeText(ItemDetailsActivity.this, "Please enter the item name and price to continue.", Toast.LENGTH_SHORT).show();
 				}
 				else {
 					AppDB db = AppDB.getInstance(view.getContext());
 					try {
-						if (isWeightBox.isChecked()) {
-							db.addItem(inputName.getText().toString() + " (" + weightValue.getText().toString() + " lbs)", byWeightPrice);
-						} else {
-							db.addItem(inputName.getText().toString(), Double.valueOf(inputPrice.getText().toString()));
+						String thisItemName = inputName.getText().toString();
+						double thisItemPrice = Double.valueOf(inputPrice.getText().toString());
+						switch (currentMode) {
+							case ITEMS_SINGLE:
+								db.addItem(thisItemName, thisItemPrice);
+								break;
+							case ITEMS_MULTIPLE:
+								int thisNumItems = Integer.valueOf(numItems.getText().toString());
+								if (dontSplitMultiple.isChecked()){
+									double thisTotalPrice = thisItemPrice * thisNumItems;
+									db.addItem(thisItemName + " (x" + thisNumItems + ")", thisTotalPrice);
+								} else {
+									for (int i = 0; i < thisNumItems; i++) {
+										db.addItem(thisItemName, thisItemPrice);
+									}
+								}
+								break;
+							case ITEMS_WEIGHT:
+								double thisItemWeight = Double.valueOf(weightValue.getText().toString());
+								db.addItem(thisItemName + " (" + thisItemWeight + " lbs)", byWeightPrice);
+								break;
 						}
 					}
 					catch (SQLiteException e) {
@@ -129,17 +187,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
 					startActivity(new Intent(view.getContext(), MainActivity.class));
 				}
 
-			}
-		});
-
-		isWeightBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-				if (b) {
-					weightLayout.setVisibility(View.VISIBLE);
-				} else {
-					weightLayout.setVisibility(View.INVISIBLE);
-				}
 			}
 		});
 

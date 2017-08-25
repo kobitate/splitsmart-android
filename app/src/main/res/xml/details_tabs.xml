@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_single"
+        icon="@drawable/add_single"
+        title="Single Item" />
+    <tab
+        id="@+id/tab_multiple"
+        icon="@drawable/add_multiple"
+        title="Multiple Items" />
+    <tab
+        id="@+id/tab_scale"
+        icon="@drawable/add_scale"
+        title="By Weight" />
+</tabs>

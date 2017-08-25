@@ -9,4 +9,7 @@
         <attr name="metaButtonBarButtonStyle" format="reference"/>
     </declare-styleable>
 
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
+
 </resources>

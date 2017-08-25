@@ -55,6 +55,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp">
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:ems="10"
+                        android:id="@+id/input_item_price"
+                        android:hint="Item Price"
+                        android:layout_weight="1"/>
+                </android.support.design.widget.TextInputLayout>
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,32 +78,30 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/input_item_price"
-                    android:hint="Item Price"
-                    android:layout_weight="1"/>
-            </android.support.design.widget.TextInputLayout>
-
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:id="@+id/multipleEntry"
+                android:visibility="gone">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Number of Items"
+                        android:id="@+id/inputNumItems"
+                        android:inputType="number"/>
+                </android.support.design.widget.TextInputLayout>
 
                 <CheckBox
-                    android:text="Price is per Pound"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/perPoundCheck"
-                    android:layout_weight="1"
-                    android:layout_marginTop="8dp"/>
+                    android:id="@+id/multipleSplitCheck"
+                    android:text="Keep Items Grouped"/>
 
             </LinearLayout>
 
@@ -98,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/weightEntry"
-                android:visibility="invisible">
+                android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -142,6 +154,15 @@
 
     </LinearLayout>
 
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        app:bb_tabXmlResource="@xml/details_tabs"
+        app:bb_showShadow="true"
+        android:layout_gravity="bottom"/>
+
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -150,7 +171,7 @@
         app:srcCompat="@drawable/check"
         android:id="@+id/details_submit"
         android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        />
+        android:layout_marginBottom="76dp"
+        android:layout_marginRight="16dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

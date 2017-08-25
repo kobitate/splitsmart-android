@@ -28,7 +28,7 @@ public class AppDB extends SQLiteOpenHelper {
 	}
 
 	private AppDB(Context context) {
-		super(context, "SPLITSMART_ITEMS", null, 1);
+		super(context, "splitsmart.db", null, 1);
 	}
 
 	@Override
