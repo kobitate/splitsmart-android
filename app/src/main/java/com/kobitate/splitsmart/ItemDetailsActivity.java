@@ -213,9 +213,12 @@ public class ItemDetailsActivity extends AppCompatActivity {
 	}
 
 	public void updateByWeightPrice() {
-		if (inputPrice.getText().length() != 0 && weightValue.getText().length() != 0) {
-			Double pricePerPound = Double.valueOf(inputPrice.getText().toString());
-			Double pounds = Double.valueOf(weightValue.getText().toString());
+		String pricePerPoundString = inputPrice.getText().toString();
+		String poundsString = weightValue.getText().toString();
+
+		if (inputPrice.getText().length() != 0 && weightValue.getText().length() != 0 && !pricePerPoundString.equals(".") && !poundsString.equals(".")) {
+			Double pricePerPound = Double.valueOf(pricePerPoundString);
+			Double pounds = Double.valueOf(poundsString);
 			Double finalPrice = pricePerPound * pounds;
 
 			finalPriceView.setText(String.format(Locale.getDefault(), "$%.2f", finalPrice));
