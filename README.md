@@ -1,6 +1,6 @@
 # SplitSmart
 
-[![Built for Android](http://i.imgur.com/j1J94XN.png)](http://forthebadge.com) [![Does not contain Treenuts](http://forthebadge.com/images/badges/does-not-contain-treenuts.svg)](http://forthebadge.com) [![Makes People Smile](http://forthebadge.com/images/badges/makes-people-smile.svg)](http://forthebadge.com)
+[![Built for Android](https://forthebadge.com/images/badges/built-for-android.svg)](http://forthebadge.com) [![Does not contain Treenuts](http://forthebadge.com/images/badges/does-not-contain-treenuts.svg)](http://forthebadge.com) [![Makes People Smile](http://forthebadge.com/images/badges/makes-people-smile.svg)](http://forthebadge.com)
 
 ![Screenshots](http://i.imgur.com/ORfLFJV.png)
 
